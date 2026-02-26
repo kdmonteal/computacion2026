@@ -6,9 +6,22 @@ scene.background = new THREE.Color(0xf8f9fa);
 
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+// 1. Selecciona el contenedor de la columna derecha en tu HTML
+const container = document.getElementById('canvas-container');
+
+// 2. Crea el renderizador
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+// 3. Configura el tamaño basado en el contenedor, NO en la ventana completa
+// Usamos clientWidth y clientHeight para obtener el ancho/alto de la columna de Bootstrap
+renderer.setSize(container.clientWidth, container.clientHeight);
+
+// 4. Agrega el lienzo (canvas) al contenedor en lugar de a document.body
+container.appendChild(renderer.domElement);
+
+// const renderer = new THREE.WebGLRenderer();
+// renderer.setSize( window.innerWidth, window.innerHeight );
+// document.body.appendChild( renderer.domElement );
 
 // First Geometry Shape (CUBE)
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
@@ -73,13 +86,13 @@ function onWindowResize(){
 
 }
 
-document.getElementById("myButton").addEventListener("click",createObject);
+document.getElementById("btnCreate").addEventListener("click",createObject);
 
 function createObject() {
-  let x = document.getElementById("x").value;
-  let y = document.getElementById("y").value;
-  let z = document.getElementById("z").value;
-  let myColor = document.getElementById("Color").value;
+  let x = document.getElementById("cube-x").value;
+  let y = document.getElementById("cube-y").value;
+  let z = document.getElementById("cube-z").value;
+  let myColor = document.getElementById("objectColor").value;
   
   const geometryCube = new THREE.BoxGeometry( x,y,z );
   const materialCube = new THREE.MeshBasicMaterial( { color: myColor, wireframe:true } );

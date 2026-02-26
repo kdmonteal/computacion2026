@@ -6,10 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Graphics 2026 - Geometry</title>
   <link rel="icon" type="image/png" href="../../src/img/computer-icon.png">
-  <!-- Bootstrap core CSS -->
   <link href="../../assets/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../src/css/main.css">
-  <!--ImportThreejs-->
   <script type="importmap">
     {
     "imports": {
@@ -17,7 +15,7 @@
         "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.183.0/examples/jsm/"
     }
     }
-    </script>
+  </script>
   <script type="module" src="../../src/js/mainTransformations.js"></script>
 </head>
 
@@ -28,9 +26,7 @@
         <div class="row">
           <div class="col-sm-8 col-md-7 py-4">
             <h4 class="text-white">About</h4>
-            <p class="text-muted">Add some information about the album below, the author, or any other background
-              context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off
-              to some social networking sites or contact information.</p>
+            <p class="text-muted">Add some information...</p>
           </div>
           <div class="col-sm-4 offset-md-1 py-4">
             <h4 class="text-white">Contact</h4>
@@ -56,35 +52,106 @@
     </div>
   </header>
 
-  <div class="card myCreateElement">
-    <div class="card-header">
-      Create Object
-    </div>
+  <div class="container-fluid">
+    <div class="row">
 
-    <div class="card-body">
-      <h5 class="card-title">Cube</h5>
+      <nav class="col-md-4 col-lg-3 bg-light p-4 border-end" style="min-height: 90vh;">
+        <h4 class="mb-4">Create Object</h4>
 
-        <div class="mb-3">
-          <label for="x" class="form-label">x (width):</label>
-          <input type="number" class="form-control" id="x" aria-describedby="x">
+        <div class="mb-4">
+          <label for="shapeSelect" class="form-label fw-bold">Select Geometry:</label>
+          <select id="shapeSelect" class="form-select" onchange="toggleInputs()">
+            <option value="cube">Cube</option>
+            <option value="torus">Torus</option>
+            <option value="cone">Cone</option>
+          </select>
         </div>
-       <div class="mb-3">
-          <label for="y" class="form-label">y (height):</label>
-          <input type="number" class="form-control" id="y" aria-describedby="y">
+
+        <div id="inputs-cube" class="shape-inputs">
+          <h6 class="text-primary border-bottom pb-2">Cube Parameters</h6>
+          <div class="mb-2">
+            <label for="cube-x" class="form-label">x (width):</label>
+            <input type="number" class="form-control form-control-sm" id="cube-x" value="1">
+          </div>
+          <div class="mb-2">
+            <label for="cube-y" class="form-label">y (height):</label>
+            <input type="number" class="form-control form-control-sm" id="cube-y" value="1">
+          </div>
+          <div class="mb-2">
+            <label for="cube-z" class="form-label">z (depth):</label>
+            <input type="number" class="form-control form-control-sm" id="cube-z" value="1">
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="z" class="form-label">z (depth):</label>
-          <input type="number" class="form-control" id="z" aria-describedby="z">
+
+        <div id="inputs-torus" class="shape-inputs" style="display: none;">
+          <h6 class="text-primary border-bottom pb-2">Torus Parameters</h6>
+          <div class="mb-2">
+            <label for="torus-r" class="form-label">r (radius):</label>
+            <input type="number" class="form-control form-control-sm" id="torus-r" value="1">
+          </div>
+          <div class="mb-2">
+            <label for="torus-t" class="form-label">t (tube):</label>
+            <input type="number" class="form-control form-control-sm" id="torus-t" value="0.4">
+          </div>
+          <div class="mb-2">
+            <label for="torus-rs" class="form-label">rs (radialSegments):</label>
+            <input type="number" class="form-control form-control-sm" id="torus-rs" value="12">
+          </div>
+          <div class="mb-2">
+            <label for="torus-ts" class="form-label">ts (tubularSegments):</label>
+            <input type="number" class="form-control form-control-sm" id="torus-ts" value="48">
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="Color" class="form-label">Color:</label>
-          <input type="color" class="form-control" id="Color" aria-describedby="Color">
+
+        <div id="inputs-cone" class="shape-inputs" style="display: none;">
+          <h6 class="text-primary border-bottom pb-2">Cone Parameters</h6>
+          <div class="mb-2">
+            <label for="cone-r" class="form-label">r (radius):</label>
+            <input type="number" class="form-control form-control-sm" id="cone-r" value="1">
+          </div>
+          <div class="mb-2">
+            <label for="cone-h" class="form-label">h (height):</label>
+            <input type="number" class="form-control form-control-sm" id="cone-h" value="2">
+          </div>
+          <div class="mb-2">
+            <label for="cone-rs" class="form-label">rs (radialSegments):</label>
+            <input type="number" class="form-control form-control-sm" id="cone-rs" value="32">
+          </div>
         </div>
-        <button id="myButton" class="btn btn-primary">Create</button>
+
+        <div class="mt-4">
+          <div class="mb-3">
+            <label for="objectColor" class="form-label fw-bold">Color:</label>
+            <input type="color" class="form-control form-control-color w-100" id="objectColor" value="#007bff">
+          </div>
+          <button id="btnCreate" class="btn btn-primary w-100">Create Geometry</button>
+        </div>
+      </nav>
+
+      <main class="col-md-8 col-lg-9 p-0" id="canvas-container">
+      </main>
+
     </div>
   </div>
 
+  <footer class="text-muted py-5">
+  <div class="container">
+    <p class="float-end mb-1">
+      <a href="#">Back to top</a>
+    </p>
+    <p class="mb-1">This interactive viewer was developed for the Computer Graphics course at the University of San Buenaventura Cali (2026), under the direction of Professor Kelly Marín. Its purpose is to explore the creation, rendering, and manipulation of 3D primitives using the Three.js library.</p>
+  </div>
+</footer>
+  <script>
+    function toggleInputs() {
+      // Ocultar todos los inputs primero
+      document.querySelectorAll('.shape-inputs').forEach(el => el.style.display = 'none');
 
+      // Mostrar solo los inputs de la geometría seleccionada
+      const selectedShape = document.getElementById('shapeSelect').value;
+      document.getElementById('inputs-' + selectedShape).style.display = 'block';
+    }
+  </script>
 
   <script src="../../assets/dist/js/bootstrap.bundle.min.js"></script>
 
