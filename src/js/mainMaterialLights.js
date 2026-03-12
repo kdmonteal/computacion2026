@@ -40,16 +40,33 @@ const materialPhong = new THREE.MeshPhongMaterial( { color: 0xffffff,
   map: new THREE.TextureLoader().load( '../../portfolio/class6/img/uv_test_bw_1024.png' ) //https://threejs.org/examples/textures/uv_grid_opengl.jpg
 } );
 
+const materialCube = [new THREE.MeshStandardMaterial( { map: new THREE.TextureLoader().load( '../../portfolio/class6/img/face1.jpg'), side: THREE.DoubleSide},
+                        new THREE.MeshStandardMaterial( { map: new THREE.TextureLoader().load( '../../portfolio/class6/img/face2.png'), side: THREE.DoubleSide},
+                        new THREE.MeshStandardMaterial( { map: new THREE.TextureLoader().load( '../../portfolio/class6/img/face3.jpg'), side: THREE.DoubleSide},
+                        new THREE.MeshStandardMaterial( { map: new THREE.TextureLoader().load( '../../portfolio/class6/img/face4.jpg'), side: THREE.DoubleSide},
+                        new THREE.MeshStandardMaterial( { map: new THREE.TextureLoader().load( '../../portfolio/class6/img/face5.png'), side: THREE.DoubleSide},
+                        new THREE.MeshStandardMaterial( { map: new THREE.TextureLoader().load( '../../portfolio/class6/img/face6.jpg'), side: THREE.DoubleSide}
+) ) ) ) ) )
+];
+
+const materialLambert = new THREE.MeshLambertMaterial( { color: 0xffffff,
+                                                          side: THREE.DoubleSide,
+                                                          map: new THREE.TextureLoader().load( '../../portfolio/class6/img/face1.jpg' ) //https://threejs.org/examples/textures/uv_grid_opengl.jpg
+} );
+
 
 const cube1 = new THREE.Mesh( geometry, material );
 cube1.position.x = -1.5;
 const cube2 = new THREE.Mesh( geometry, materialStand );
 const cube3 = new THREE.Mesh( geometry, materialPhong );
+const cube4 = new THREE.Mesh( geometry, materialCube );
 cube3.position.x = 1.5;
+cube4.position.x = 3.0;
 
 scene.add( cube1 );
 scene.add( cube2 );
 scene.add( cube3 );
+scene.add( cube4 );
 
 const controls = new OrbitControls( camera, renderer.domElement );
 camera.position.z = 5;
