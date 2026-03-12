@@ -10,19 +10,52 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+// Light
+const ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 );
+scene.add( ambientLight );  
+
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+directionalLight.position.set( 5, 10, 7.5 );
+scene.add( directionalLight );
+
 // First Geometry Shape
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material = new THREE.MeshBasicMaterial( { color: 0x00ffff } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+const material = new THREE.MeshBasicMaterial( { color: 0x00ffff,
+                                                transparent: true,
+                                                opacity: 0.5,
+                                                wireframe: false,
+                                                wireframeLinewidth: 6             
+ } );
+
+const materialStand = new THREE.MeshStandardMaterial( { color: 0xff00ff,
+                                                roughness: 0.5,
+                                                metalness: 1.0,
+                                                transparent: false,
+} );
+
+const materialPhong = new THREE.MeshPhongMaterial( { color: 0xffffff,
+  specular: 0xffffff,
+  shininess: 30,
+  side: THREE.DoubleSide,
+  map: new THREE.TextureLoader().load( '../../portfolio/class6/img/uv_test_bw_1024.png' ) //https://threejs.org/examples/textures/uv_grid_opengl.jpg
+} );
+
+
+const cube1 = new THREE.Mesh( geometry, material );
+cube1.position.x = -1.5;
+const cube2 = new THREE.Mesh( geometry, materialStand );
+const cube3 = new THREE.Mesh( geometry, materialPhong );
+cube3.position.x = 1.5;
+
+scene.add( cube1 );
+scene.add( cube2 );
+scene.add( cube3 );
 
 const controls = new OrbitControls( camera, renderer.domElement );
 camera.position.z = 5;
 controls.update();
 
 function animate( time ) {
-  cube.rotation.x = time / 2000;
-  cube.rotation.y = time / 1000;
   controls.update();
   renderer.render( scene, camera );
 }
