@@ -20,7 +20,7 @@ function initScene() {
         75,                                     // Ángulo "grabación" - De abaja -> Arriba 
         window.innerWidth / window.innerHeight, // Relación de aspecto 16:9
         1,                                    // Mas cerca (no renderiza) 
-        10000                                    // Mas lejos (no renderiza)
+        10000                                  // Mas lejos (no renderiza)
     );
 
     // renderer = new THREE.WebGLRenderer();
@@ -41,8 +41,6 @@ function initScene() {
 
     var axesHelper = new THREE.AxesHelper( 1 );
     scene.add( axesHelper );
-
-
 
     //////
     var geo = new THREE.BoxGeometry( 1, 1, 1 );     

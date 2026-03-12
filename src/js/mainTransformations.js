@@ -85,17 +85,3 @@ function onWindowResize(){
     renderer.setSize( window.innerWidth, window.innerHeight );
 
 }
-
-document.getElementById("btnCreate").addEventListener("click",createObject);
-
-function createObject() {
-  let x = document.getElementById("cube-x").value;
-  let y = document.getElementById("cube-y").value;
-  let z = document.getElementById("cube-z").value;
-  let myColor = document.getElementById("objectColor").value;
-  
-  const geometryCube = new THREE.BoxGeometry( x,y,z );
-  const materialCube = new THREE.MeshBasicMaterial( { color: myColor, wireframe:true } );
-  const cube = new THREE.Mesh( geometryCube, materialCube );
-  scene.add( cube );
-}
