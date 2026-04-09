@@ -2,11 +2,13 @@ import * as THREE from 'three';
 import Stats from 'three/addons/libs/stats.module.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
+import { Capsule } from 'three/addons/math/Capsule.js';
 
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+const timer = new THREE.Timer();
+timer.connect( document );
 
-const clock = new THREE.Timer();
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000); //0x5C0D00
 
@@ -19,6 +21,11 @@ document.body.appendChild( renderer.domElement );
 
 
 // Light
+
+const fillLight1 = new THREE.HemisphereLight( 0x8dc1de, 0x00668d, 1.5 );
+fillLight1.position.set( 2, 1, 1 );
+scene.add( fillLight1 );
+
 const ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 );
 scene.add( ambientLight );  
 
@@ -34,6 +41,8 @@ stats.domElement.style.top = '0px';
 document.body.appendChild( stats.domElement );
 
 function animate( time ) {
+    timer.update();
+    stats.update();
   renderer.render( scene, camera );
 }
 
