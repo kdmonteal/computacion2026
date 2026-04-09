@@ -73,10 +73,32 @@ for(i = 0; i < asteroids; i++){
 
 executeFrame();
 function select(element){
+    goScreen(element.textContent);
 element.addEventListener('webkitAnimationEnd', function(){
     this.style.webkitAnimationName = '';
 }, false);
 element.style.animation = "selectoption 0.2s cubic-bezier(0.86, 0, 0.07, 1) forwards" ;
+}
+
+function goScreen(name){
+
+    let myName = name.trim();
+
+    switch (myName) {
+    case "Resume":
+        alert("Resuming game...");
+        break;
+    case "NewGame":
+        window.location.href = "./viewer/level1.html"; // O la página donde se retoma
+        break;
+    case "Settings":
+        alert("Opening settings...");
+        break;
+    case "Exit":
+        alert("Exiting game...");
+        break;
+    }
+
 }
 
 
