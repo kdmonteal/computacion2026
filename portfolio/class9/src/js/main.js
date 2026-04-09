@@ -78,3 +78,21 @@ element.addEventListener('webkitAnimationEnd', function(){
 }, false);
 element.style.animation = "selectoption 0.2s cubic-bezier(0.86, 0, 0.07, 1) forwards" ;
 }
+
+
+// AUDIO play
+window.addEventListener('load', function() {
+    var audio = document.getElementById('miAudio');
+    var reproducir = function() {
+        audio.play().then(function() {
+            document.removeEventListener('click', reproducir);
+            document.removeEventListener('keydown', reproducir);
+        }).catch(function(error) {
+            console.log("Esperando interacción real...");
+        });
+    };
+
+    // Escuchar clics o teclas (las interacciones que sí valen)
+    document.addEventListener('click', reproducir);
+    document.addEventListener('keydown', reproducir);
+});
