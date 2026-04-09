@@ -85,11 +85,11 @@ function goScreen(name){
     let myName = name.trim();
 
     switch (myName) {
-    case "Resume":
-        alert("Resuming game...");
-        break;
     case "NewGame":
-        window.location.href = "./viewer/level1.html"; // O la página donde se retoma
+        window.location.href = "./viewer/level1.html";
+        break;
+    case "Characters":
+        alert("Selecting characters...");
         break;
     case "Settings":
         alert("Opening settings...");
