@@ -1,9 +1,14 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import Stats from 'three/addons/libs/stats.module.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+
+const clock = new THREE.Timer();
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xf8f9fa);
+scene.background = new THREE.Color(0x000000); //0x5C0D00
 
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
@@ -12,21 +17,36 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setAnimationLoop( animate );
 document.body.appendChild( renderer.domElement );
 
-const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+
+// Light
+const ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 );
+scene.add( ambientLight );  
+
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+directionalLight.position.set( 5, 10, 7.5 );
+scene.add( directionalLight );
 
 camera.position.z = 5;
 
+const stats = new Stats();
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.top = '0px';
+document.body.appendChild( stats.domElement );
+
 function animate( time ) {
-
-  cube.rotation.x = time / 2000;
-  cube.rotation.y = time / 1000;
-
   renderer.render( scene, camera );
-
 }
+
+/// LOAD SCENE ////////////////////////////////
+const loader = new GLTFLoader();
+// Optional: Provide a DRACOLoader instance to decode compressed mesh data
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath( '../src/models/glb/' );
+loader.setDRACOLoader( dracoLoader );
+const gltf = await loader.loadAsync( '../src/models/glb/scene.glb' );
+gltf.scene.position.set(0, -2.5, 3.5);
+gltf.scene.rotation.y = Math.PI*1.5; // Rota 180 grados en el eje Y
+scene.add( gltf.scene );
 ///////////////////////////////////////////////
 
 

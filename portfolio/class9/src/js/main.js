@@ -55,7 +55,7 @@ function createAsteroids(){
   }
   
 // CAMBIO AQUÍ: De rgba(21,2,40,1) a negro puro
-ctx.fillStyle = "rgba(0,0,0,1)"; 
+ctx.fillStyle = "rgb(38, 6, 1)"; 
 ctx.fillRect(0,0, canvas.width, canvas.height);
 
 // Dibujado de meteoros
