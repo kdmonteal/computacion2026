@@ -17,20 +17,6 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setAnimationLoop( animate );
 document.body.appendChild( renderer.domElement );
 
-
-// Light
-
-const fillLight1 = new THREE.HemisphereLight( 0x8dc1de, 0x00668d, 1.5 );
-fillLight1.position.set( 2, 1, 1 );
-scene.add( fillLight1 );
-
-const ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 );
-scene.add( ambientLight );  
-
-const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
-directionalLight.position.set( 5, 10, 7.5 );
-scene.add( directionalLight );
-
 camera.position.z = 5;
 
 const stats = new Stats();
@@ -106,12 +92,41 @@ const lightFolder = gui.addFolder('Light');
 lightFolder.open();
 
 // Añadir controles a la carpeta de luz
-lightFolder.add(params, 'lightType', ['Point', 'Directional', 'Ambient']).name('Light Type');
+lightFolder.add(params, 'lightType', ['Hemisphere', 'Directional', 'Ambient']).name('Light Type').onChange(changeTypeLight);
 lightFolder.add(params, 'enabled').name('Light Enabled');
 lightFolder.add(params, 'intensity', 0, 2).name('Light Intensity');
 lightFolder.addColor(params, 'color').name('Light Color');
 lightFolder.add(params, 'positionX', -10, 10).name('Position X');
 lightFolder.add(params, 'toggleLight').name('Toggle Light');
+
+// Light
+let currentLight = new THREE.HemisphereLight( 0x8dc1de, 0x00668d, 1.5 );
+scene.add( currentLight );
+
+function changeTypeLight(typeLight) {
+    scene.remove(currentLight);
+    switch (typeLight) {
+        case 'Hemisphere':
+            currentLight = new THREE.HemisphereLight( 0x8dc1de, 0x00668d, 1.5 );
+        break;
+        case 'Directional':
+            currentLight = new THREE.DirectionalLight( 0xffffff, 1 );
+            currentLight.position.set( 5, 10, 7.5 );
+        break;
+        case 'Ambient':
+            currentLight = new THREE.AmbientLight( 0xffffff, 0.5 );
+        break;
+
+        default:
+            currentLight = new THREE.HemisphereLight( 0x8dc1de, 0x00668d, 1.5 );
+        break
+    }
+
+    currentLight.position.set( 2, 1, 1 );
+    scene.add( currentLight );
+}
+
+
 
 const cameraFolder = gui.addFolder('Camera Translation');
       cameraFolder.add(camera.position, 'x', -10, 10).name('Position X');
@@ -126,4 +141,4 @@ const cameraFolder2 = gui.addFolder('Camera Rotation');
       cameraFolder2.open();
 
 const cameraFolder3 = gui.addFolder('Camera Controls');
-      cameraFolder3.add({ Script: 'Orbit' }, 'Script', ['Orbit', 'Trackball', 'Fly', 'FirstPerson', 'PointerLock']).onChange(setControl);
+      cameraFolder3.add({ Script: 'Orbit' }, 'Script', ['Orbit', 'Trackball', 'Fly', 'FirstPerson', 'PointerLock']).onChange();
