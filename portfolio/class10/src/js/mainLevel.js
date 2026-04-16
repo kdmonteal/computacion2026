@@ -77,14 +77,11 @@ const gui = new GUI();
 
 // Parámteros iniciales para controlar la luz
 const params = {
-  lightType: 'Point',
+  lightType: 'Hemisphere',
   enabled: true,
   intensity: 1,
   color: '#ffffff',
-  positionX: 0,
-  toggleLight: function() {
-      this.enabled = !this.enabled;
-  }
+  positionX: 0
 };
 
 // Crear la carpeta de luz
@@ -94,10 +91,9 @@ lightFolder.open();
 // Añadir controles a la carpeta de luz
 lightFolder.add(params, 'lightType', ['Hemisphere', 'Directional', 'Ambient']).name('Light Type').onChange(changeTypeLight);
 lightFolder.add(params, 'enabled').name('Light Enabled').onChange(value => currentLight.visible = value);
-lightFolder.add(params, 'intensity', 0, 2).name('Light Intensity');
-lightFolder.addColor(params, 'color').name('Light Color');
-lightFolder.add(params, 'positionX', -10, 10).name('Position X');
-lightFolder.add(params, 'toggleLight').name('Toggle Light');
+lightFolder.add(params, 'intensity', 0, 2).name('Light Intensity').onChange(value => currentLight.intensity = value);
+lightFolder.addColor(params, 'color').name('Light Color').onChange(value => currentLight.color.set(value));
+lightFolder.add(params, 'positionX', -10, 10).name('Position X').onChange(value => currentLight.position.x = value);
 
 // Light
 let currentLight = new THREE.HemisphereLight( 0x8dc1de, 0x00668d, 1.5 );
