@@ -11,20 +11,12 @@ import { PointerLockControls } from 'three/addons/controls/PointerLockControls.j
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 
-const description = {
-    Orbit: 'OrbitControls: Permite rotar alrededor de un punto objetivo, hacer zoom y desplazarse. Es ideal para visualizar modelos 3D.',
-    Fly: 'FlyControls: Permite volar a través de la escena con movimientos suaves. Es ideal para simulaciones de vuelo o exploración en primera persona.',
-    FirstPerson: 'FirstPersonControls: Simula el movimiento de un personaje en primera persona, permitiendo caminar y mirar alrededor. Es perfecto para juegos o experiencias inmersivas.',
-    PointerLock: 'PointerLockControls: Similar a FirstPersonControls pero requiere que el usuario haga clic para bloquear el cursor, proporcionando una experiencia de control total. Es ideal para juegos en primera persona.',
-    Trackball: 'TrackballControls: Similar a OrbitControls pero con una sensación de control más fluida, como si estuvieras manipulando una bola de control. Es excelente para exploración libre.',
-    Transform: 'TransformControls: Permite manipular objetos en la escena (mover, rotar, escalar) de manera interactiva. Es útil para editores de escenas o herramientas de diseño.'
-};  
-
 const timer = new THREE.Timer();
 timer.connect( document );
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000); //0x5C0D00
+scene.background = new THREE.Color(0x111111); //0x5C0D00
+scene.fog = new THREE.Fog( 0x111111, 1, 5 );
 
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
@@ -39,6 +31,24 @@ const stats = new Stats();
 stats.domElement.style.position = 'absolute';
 stats.domElement.style.top = '0px';
 document.body.appendChild( stats.domElement );
+
+const description = {
+    Orbit: 'OrbitControls: Permite rotar alrededor de un punto objetivo, hacer zoom y desplazarse. Es ideal para visualizar modelos 3D.',
+    Fly: 'FlyControls: Permite volar a través de la escena con movimientos suaves. Es ideal para simulaciones de vuelo o exploración en primera persona.',
+    FirstPerson: 'FirstPersonControls: Simula el movimiento de un personaje en primera persona, permitiendo caminar y mirar alrededor. Es perfecto para juegos o experiencias inmersivas.',
+    PointerLock: 'PointerLockControls: Similar a FirstPersonControls pero requiere que el usuario haga clic para bloquear el cursor, proporcionando una experiencia de control total. Es ideal para juegos en primera persona.',
+    Trackball: 'TrackballControls: Similar a OrbitControls pero con una sensación de control más fluida, como si estuvieras manipulando una bola de control. Es excelente para exploración libre.',
+    Transform: 'TransformControls: Permite manipular objetos en la escena (mover, rotar, escalar) de manera interactiva. Es útil para editores de escenas o herramientas de diseño.'
+};  
+
+const constrolMap = {
+    Orbit: new OrbitControls( camera, renderer.domElement ),
+    Fly: new FlyControls( camera, renderer.domElement ),
+    FirstPerson: new FirstPersonControls( camera, renderer.domElement ),
+    PointerLock: new PointerLockControls( camera, document.body ),
+    Trackball: new TrackballControls( camera, renderer.domElement ),
+    Transform: new TransformControls( camera, renderer.domElement )
+};  
 
 function animate( time ) {
     timer.update();
