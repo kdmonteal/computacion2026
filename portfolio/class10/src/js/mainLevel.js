@@ -93,7 +93,7 @@ lightFolder.open();
 
 // Añadir controles a la carpeta de luz
 lightFolder.add(params, 'lightType', ['Hemisphere', 'Directional', 'Ambient']).name('Light Type').onChange(changeTypeLight);
-lightFolder.add(params, 'enabled').name('Light Enabled');
+lightFolder.add(params, 'enabled').name('Light Enabled').onChange(value => currentLight.visible = value);
 lightFolder.add(params, 'intensity', 0, 2).name('Light Intensity');
 lightFolder.addColor(params, 'color').name('Light Color');
 lightFolder.add(params, 'positionX', -10, 10).name('Position X');
