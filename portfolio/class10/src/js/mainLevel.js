@@ -3,6 +3,22 @@ import Stats from 'three/addons/libs/stats.module.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GUI } from 'lil-gui';
+/* CONTROLS */
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { FlyControls } from 'three/addons/controls/FlyControls.js';
+import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
+import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+import { TransformControls } from 'three/addons/controls/TransformControls.js';
+
+const description = {
+    Orbit: 'OrbitControls: Permite rotar alrededor de un punto objetivo, hacer zoom y desplazarse. Es ideal para visualizar modelos 3D.',
+    Fly: 'FlyControls: Permite volar a través de la escena con movimientos suaves. Es ideal para simulaciones de vuelo o exploración en primera persona.',
+    FirstPerson: 'FirstPersonControls: Simula el movimiento de un personaje en primera persona, permitiendo caminar y mirar alrededor. Es perfecto para juegos o experiencias inmersivas.',
+    PointerLock: 'PointerLockControls: Similar a FirstPersonControls pero requiere que el usuario haga clic para bloquear el cursor, proporcionando una experiencia de control total. Es ideal para juegos en primera persona.',
+    Trackball: 'TrackballControls: Similar a OrbitControls pero con una sensación de control más fluida, como si estuvieras manipulando una bola de control. Es excelente para exploración libre.',
+    Transform: 'TransformControls: Permite manipular objetos en la escena (mover, rotar, escalar) de manera interactiva. Es útil para editores de escenas o herramientas de diseño.'
+};  
 
 const timer = new THREE.Timer();
 timer.connect( document );
@@ -86,7 +102,7 @@ const params = {
 
 // Crear la carpeta de luz
 const lightFolder = gui.addFolder('Light');
-lightFolder.open();
+lightFolder.close();
 
 // Añadir controles a la carpeta de luz
 lightFolder.add(params, 'lightType', ['Hemisphere', 'Directional', 'Ambient']).name('Light Type').onChange(changeTypeLight);
@@ -122,19 +138,18 @@ function changeTypeLight(typeLight) {
     scene.add( currentLight );
 }
 
-
-
 const cameraFolder = gui.addFolder('Camera Translation');
       cameraFolder.add(camera.position, 'x', -10, 10).name('Position X');
       cameraFolder.add(camera.position, 'y', -10, 10).name('Position Y');
       cameraFolder.add(camera.position, 'z', -10, 10).name('Position Z');
-      cameraFolder.open();
+      cameraFolder.close();
 
 const cameraFolder2 = gui.addFolder('Camera Rotation');
       cameraFolder2.add(camera.rotation, 'x', -Math.PI, Math.PI).name('Rotation X');
       cameraFolder2.add(camera.rotation, 'y', -Math.PI, Math.PI).name('Rotation Y');
       cameraFolder2.add(camera.rotation, 'z', -Math.PI, Math.PI).name('Rotation Z');
-      cameraFolder2.open();
+      cameraFolder2.close();
 
 const cameraFolder3 = gui.addFolder('Camera Controls');
       cameraFolder3.add({ Script: 'Orbit' }, 'Script', ['Orbit', 'Trackball', 'Fly', 'FirstPerson', 'PointerLock']).onChange();
+      cameraFolder3.open();
