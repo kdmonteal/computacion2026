@@ -41,7 +41,7 @@ const description = {
     Transform: 'TransformControls: Permite manipular objetos en la escena (mover, rotar, escalar) de manera interactiva. Es útil para editores de escenas o herramientas de diseño.'
 };  
 
-const constrolMap = {
+const controlMap = {
     Orbit: new OrbitControls( camera, renderer.domElement ),
     Fly: new FlyControls( camera, renderer.domElement ),
     FirstPerson: new FirstPersonControls( camera, renderer.domElement ),
@@ -50,10 +50,21 @@ const constrolMap = {
     Transform: new TransformControls( camera, renderer.domElement )
 };  
 
+// Configuración inicial de controles
+controlMap.Fly.movementSpeed = 5;
+controlMap.Fly.rollSpeed = Math.PI / 24;
+controlMap.FirstPerson.movementSpeed = 5;
+controlMap.FirstPerson.lookSpeed = 0.1;
+
 function animate( time ) {
     timer.update();
     stats.update();
   renderer.render( scene, camera );
+}
+
+function setControls(key) {
+    // Lógica para establecer los controles
+    alert(`Cambiando a ${key} Controls`);
 }
 
 /// LOAD SCENE ////////////////////////////////
@@ -161,5 +172,5 @@ const cameraFolder2 = gui.addFolder('Camera Rotation');
       cameraFolder2.close();
 
 const cameraFolder3 = gui.addFolder('Camera Controls');
-      cameraFolder3.add({ Script: 'Orbit' }, 'Script', ['Orbit', 'Trackball', 'Fly', 'FirstPerson', 'PointerLock']).onChange();
+      cameraFolder3.add({ Script: 'Orbit' }, 'Script', ['Orbit', 'Trackball', 'Fly', 'FirstPerson', 'PointerLock']).onChange(setControls);
       cameraFolder3.open();
