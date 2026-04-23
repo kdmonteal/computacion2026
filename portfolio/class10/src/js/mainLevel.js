@@ -26,13 +26,12 @@ document.body.appendChild(renderer.domElement);
 camera.position.z = 5;
 
 // Objeto principal que vamos a modificar en las transformaciones
-const boxGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-const boxMaterial = new THREE.MeshStandardMaterial({ color: 0xff0055 });
-const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
-scene.add(boxMesh);
-
+const boxMesh = new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 0.5, 0.5),
+    new THREE.MeshStandardMaterial({ color: 0xff0055 })
+);
 boxMesh.position.set(0, -0.5, 3.5);
-
+scene.add(boxMesh);
 
 /* *********** STATS*********** */
 const timer = new THREE.Timer();
@@ -42,8 +41,6 @@ const stats = new Stats();
 stats.domElement.style.position = 'absolute';
 stats.domElement.style.top = '0px';
 document.body.appendChild(stats.domElement);
-
-
 
 /* *********** DESCRIPTIONS *********** */
 const description = {
@@ -84,7 +81,8 @@ function setControls(key) {
     Object.keys(controlMap).forEach(controlKey => {
         const control = controlMap[controlKey];
         if(control.enabled !== undefined) control.enabled = false; // Para controles que tienen enabled
-        if(controlKey === 'Transform') scene.remove(control); // Para TransformControls, lo removemos de la escena
+        
+        if(controlKey === 'Transform') scene.remove(control.getHelper()); // Para TransformControls, lo removemos de la escena (removemos el helper que es lo que se ve)
     });
 
     activeControl = key;
@@ -98,10 +96,10 @@ function setControls(key) {
 
     // Logica para activar el control seleccionado
     if(key === 'Transform') {
-        scene.add(active); // Para TransformControls, lo añadimos a la escena
-        active.enabled = true; // Activamos el control
-        controlMap.Orbit.enabled = true; // Desactivamos OrbitControls para evitar conflictos
-    } else if (key === 'PointerLock') {
+        scene.add(active.getHelper()); 
+        active.enabled = true;
+        controlMap.Orbit.enabled = false;
+    }  else if (key === 'PointerLock') {
         // No se activa automáticamente, el usuario debe hacer clic para bloquear el cursor
     } else {
         if(active.enabled !== undefined) active.enabled = true; // Activamos el control seleccionado    
@@ -206,7 +204,7 @@ cameraFolder2.add(camera.rotation, 'z', -Math.PI, Math.PI).name('Rotation Z');
 cameraFolder2.close();
 
 const cameraFolder3 = gui.addFolder('Camera Controls');
-cameraFolder3.add({ Script: 'Orbit' }, 'Script', ['Orbit', 'Trackball', 'Fly', 'FirstPerson', 'PointerLock']).onChange(setControls);
+cameraFolder3.add({ Script: 'Orbit' }, 'Script', ['Orbit', 'Trackball', 'Fly', 'FirstPerson', 'PointerLock', 'Transform']).onChange(setControls);
 cameraFolder3.open();
 
 // ***** ANIMATE ***********
