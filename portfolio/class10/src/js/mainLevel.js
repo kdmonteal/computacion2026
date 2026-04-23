@@ -74,6 +74,7 @@ controlMap.Transform.attach(boxMesh); // Asociamos el TransformControls al boxMe
 let activeControl = 'Orbit'; // Control activo por defecto
 const titleElement = document.getElementById('control-title');
 const descElement = document.getElementById('control-desc');
+const instruccionDIV = document.getElementById('instructions');
 
 function setControls(key) {
 
@@ -93,6 +94,7 @@ function setControls(key) {
     // Cambiamos el texto del título y la descripción (Inferior izquierda)
     titleElement.textContent = `${key} Controls`;
     descElement.textContent = description[key] || 'Descripción no disponible.';
+    if(instruccionDIV) instruccionDIV.style.display = (key === 'PointerLock') ? 'block' : 'none'; // Mostramos instrucciones solo para PointerLock
 
     // Logica para activar el control seleccionado
     if(key === 'Transform') {
@@ -106,12 +108,40 @@ function setControls(key) {
     }
 
     // Para la opcion de firstperson debemos capturar el pointer lock
-
+    renderer.domElement.addEventListener('click', () => {
+        if (activeControl === 'PointerLock') {
+            controlMap.PointerLock.lock();
+        }
+    });
 
     // Lógica para establecer los controles
     // alert(`Cambiando a ${key} Controls`);
 }
 
+// LOGICA DEL MOVIMIENTO POINTER LOCK (PointerLockControls)
+const keys = {w: false, a: false, s: false, d: false};
+const velocity = new THREE.Vector3();
+const direction = new THREE.Vector3();
+
+// window.addEventListener('keydown', (e) => {
+//     if(keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()] = true;});
+// window.addEventListener('keyup', (e) => {
+//     if(keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()] = false;});
+
+
+window.addEventListener('keydown', (e) => {
+    if(keys.hasOwnProperty(e.key.toLowerCase())) {
+        keys[e.key.toLowerCase()] = true;
+        console.log(`Estado de teclas Down: W=${keys.w}, A=${keys.a}, S=${keys.s}, D=${keys.d}`);
+    }
+}); 
+
+window.addEventListener('keyup', (e) => {
+    if(keys.hasOwnProperty(e.key.toLowerCase())) {
+        keys[e.key.toLowerCase()] = false;
+        console.log(`Estado de teclas Up: W=${keys.w}, A=${keys.a}, S=${keys.s}, D=${keys.d}`);
+    }
+});     
 /// ************** LOAD 3D MODEL************************
 const loader = new GLTFLoader();
 // Optional: Provide a DRACOLoader instance to decode compressed mesh data
@@ -222,6 +252,21 @@ function animate() {
     if(activeControl === 'FirstPerson') controlMap.FirstPerson.update(delta);
 
     // PointerLockControls no necesita actualización en el loop, se maneja con eventos de mouse
+    // Movimiento manual para PointerLock
+    if (activeControl === 'PointerLock' && controlMap.PointerLock.isLocked) {
+        velocity.x -= velocity.x * 10.0 * delta;
+        velocity.z -= velocity.z * 10.0 * delta;
+        direction.z = Number(keys.w) - Number(keys.s);
+        direction.x = Number(keys.d) - Number(keys.a);
+        direction.normalize();
+        
+        if (keys.w || keys.s) velocity.z -= direction.z * 400.0 * delta;
+        if (keys.a || keys.d) velocity.x -= direction.x * 400.0 * delta;
+        
+        controlMap.PointerLock.moveRight(-velocity.x * delta);
+        controlMap.PointerLock.moveForward(-velocity.z * delta);
+    }
+    
     renderer.render(scene, camera);
 }
 
@@ -236,3 +281,7 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
 }
+
+// Estado inicial
+setControls('Orbit');
+animate();
