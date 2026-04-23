@@ -11,9 +11,7 @@ import { PointerLockControls } from 'three/addons/controls/PointerLockControls.j
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 
-const timer = new THREE.Timer();
-timer.connect( document );
-
+/* *********** SCENE, CAMERA, RENDERER *********** */
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111111); //0x5C0D00
 scene.fog = new THREE.Fog( 0x111111, 1, 5 );
@@ -27,11 +25,27 @@ document.body.appendChild( renderer.domElement );
 
 camera.position.z = 5;
 
+// Objeto principal que vamos a modificar en las transformaciones
+const boxGeometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
+const boxMaterial = new THREE.MeshStandardMaterial( { color: 0xff0055 } );
+const boxMesh = new THREE.Mesh( boxGeometry, boxMaterial );
+scene.add( boxMesh );
+
+boxMesh.position.set(0, -0.5, 3.5);
+
+
+/* *********** STATS*********** */
+const timer = new THREE.Timer();
+timer.connect( document );
+
 const stats = new Stats();
 stats.domElement.style.position = 'absolute';
 stats.domElement.style.top = '0px';
 document.body.appendChild( stats.domElement );
 
+
+
+/* *********** DESCRIPTIONS *********** */
 const description = {
     Orbit: 'Permite rotar alrededor de un punto objetivo, hacer zoom y desplazarse. Es ideal para visualizar modelos 3D.',
     Fly: 'Permite volar a través de la escena con movimientos suaves. Es ideal para simulaciones de vuelo o exploración en primera persona.',
@@ -41,6 +55,7 @@ const description = {
     Transform: 'Permite manipular objetos en la escena (mover, rotar, escalar) de manera interactiva. Es útil para editores de escenas o herramientas de diseño.'
 };  
 
+// configuraciones iniciales para los controles
 const controlMap = {
     Orbit: new OrbitControls( camera, renderer.domElement ),
     Fly: new FlyControls( camera, renderer.domElement ),
@@ -50,11 +65,12 @@ const controlMap = {
     Transform: new TransformControls( camera, renderer.domElement )
 };  
 
-// Configuración inicial de controles
+// Configuración específica de controles
 controlMap.Fly.movementSpeed = 5;
 controlMap.Fly.rollSpeed = Math.PI / 24;
 controlMap.FirstPerson.movementSpeed = 5;
 controlMap.FirstPerson.lookSpeed = 0.1;
+controlMap.Transform.attach( boxMesh ); // Asociamos el TransformControls al boxMesh
 
 function animate( time ) {
     timer.update();
